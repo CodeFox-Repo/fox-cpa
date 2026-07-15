@@ -57,12 +57,12 @@
     "unsaved_changes_message": "你有未保存的更改，离开后将丢失这些更改。确定要离开吗？"
   },
   "title": {
-    "login": "CLI Proxy API Management Center",
-    "abbr": "CPAMC"
+    "login": "Fox CPA",
+    "abbr": "FOX CPA"
   },
   "splash": {
-    "title": "CLI Proxy API",
-    "subtitle": "管理中心"
+    "title": "Fox CPA",
+    "subtitle": "OAuth 账号池"
   },
   "login": {
     "subtitle": "请输入连接信息以访问管理界面",

@@ -57,12 +57,12 @@
     "unsaved_changes_message": "У вас есть несохранённые изменения. Если вы уйдёте, они будут потеряны. Выйти?"
   },
   "title": {
-    "login": "Центр управления CLI Proxy API",
-    "abbr": "CPAMC"
+    "login": "Fox CPA",
+    "abbr": "FOX CPA"
   },
   "splash": {
-    "title": "CLI Proxy API",
-    "subtitle": "Центр управления"
+    "title": "Fox CPA",
+    "subtitle": "Пул OAuth"
   },
   "login": {
     "subtitle": "Введите данные подключения, чтобы получить доступ к панели управления",

@@ -1,19 +1,24 @@
-# CLI Proxy API 管理中心
+# Fox CPA
 
-用于管理与故障排查 **CLI Proxy API** 的单文件 Web UI（React + TypeScript），通过 **Management API** 完成配置、凭据与日志等管理操作。
+面向本地 OAuth 账号池的精简版 **CLI Proxy API** 单文件 Web UI（React + TypeScript）。只暴露 **认证文件** 与 **配额管理** 两个页面。
 
 [English](README.md)
 
-**主项目**: https://github.com/router-for-me/CLIProxyAPI  
+**上游 CLI Proxy API**: https://github.com/router-for-me/CLIProxyAPI
 **示例地址**: https://remote.router-for.me/  
 **最低版本要求**: ≥ 7.1.0（推荐最新）
 
 从6.0.19版本开始，Web UI 随主程序一起提供；服务运行后，通过 API 端口上的"/management.html"访问它。
 
-## 这是什么（以及不是什么）
+## 范围
 
-- 本仓库只包含 Web 管理界面本身，通过 CLI Proxy API 的 **Management API**（`/v0/management`）读取/修改配置、上传凭据与查看日志。
+- 本仓库只包含 Web 管理界面本身，通过 CLI Proxy API 的 **Management API**（`/v0/management`）工作。
+- 左侧导航与客户端路由被限制为 **认证文件** 和 **配额管理**；其余面板路由都会跳回认证文件页。
 - 它 **不是** 代理本体，不参与流量转发。
+
+## 上游项目
+
+Fox CPA 是 [Cli-Proxy-API-Management-Center](https://github.com/router-for-me/Cli-Proxy-API-Management-Center) 的精简 fork；完整管理界面请使用上游项目。
 
 ## 快速开始
 
@@ -71,18 +76,10 @@ bun run build
 当你从非 localhost 的浏览器访问时，服务端通常需要开启远程管理（例如 `allow-remote-management: true`）。  
 完整鉴权规则、服务端限制与边界情况请参考 CLI Proxy API 服务端文档或配置注释。
 
-## 功能一览（按页面对应）
+## 保留页面
 
-- **仪表盘**：连接状态、服务版本/构建时间、关键数量概览、可用模型概览。
-- **配置面板**：可视化编辑常用 `config.yaml` 字段、基础设置与代理 `api-keys`；也支持源码编辑、YAML 高亮/搜索与保存前差异预览。
-- **AI 提供商**：
-  - Gemini/Codex/Claude/Vertex 配置（Base URL、Headers、代理、模型别名、排除模型、Prefix）。
-  - OpenAI 兼容提供商（多 Key、Header、自助从 `/v1/models` 拉取并导入模型别名、可选浏览器侧 `chat/completions` 测试）。
-- **认证文件**：上传/下载/删除 JSON 凭据，筛选/搜索/分页，标记 runtime-only；查看单个凭据可用模型（依赖后端支持）；管理 OAuth 排除模型（支持 `*` 通配符）；配置 OAuth 模型别名映射。
-- **OAuth**：对 Codex、Anthropic/Claude、Antigravity、Kimi、xAI/Grok 发起 OAuth/设备码流程并轮询状态；支持提交回调 URL 或 xAI/Grok 页面显示的 code；包含 Vertex JSON 凭据导入与 iFlow Cookie 导入。
-- **配额管理**：管理 Claude、Antigravity、Codex、Kimi、xAI/Grok 等提供商的配额上限与使用情况。
-- **日志**：增量拉取日志、自动刷新、搜索、隐藏管理端流量、清空日志；下载请求错误日志文件。
-- **系统信息**：快捷链接、版本检查、请求日志开关、本地登录信息清理，以及拉取 `/v1/models` 并分组展示（需要至少一个代理 API Key 才能查询模型）。
+- **认证文件**：查看、上传、下载、删除 OAuth 凭据，并管理单账号 OAuth 排除模型和模型别名。
+- **配额管理**：查看 CPA 上报的提供商配额和用量。
 
 ## 技术栈
 
@@ -116,8 +113,7 @@ bun run build
 ## 构建与发布说明
 
 - 使用 Vite 输出 **单文件 HTML**（`dist/index.html`），资源全部内联（`vite-plugin-singlefile`）。
-- 打 `vX.Y.Z` 标签会触发 `.github/workflows/release.yml`，发布 `dist/management.html`。
-- 系统信息页显示的 UI 版本在构建期注入（优先使用环境变量 `VERSION`，否则使用 git tag / `package.json`）。
+- 替换本地 CPA 面板时，将构建产物复制到 CPA 的 `static/management.html`，并在 CPA 配置中设置 `remote-management.disable-auto-update-panel: true`。
 
 ## 安全提示
 

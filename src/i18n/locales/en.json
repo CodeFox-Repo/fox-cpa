@@ -57,12 +57,12 @@
     "unsaved_changes_message": "You have unsaved changes. Leaving now will discard them. Do you want to leave?"
   },
   "title": {
-    "login": "CLI Proxy API Management Center",
-    "abbr": "CPAMC"
+    "login": "Fox CPA",
+    "abbr": "FOX CPA"
   },
   "splash": {
-    "title": "CLI Proxy API",
-    "subtitle": "Management Center"
+    "title": "Fox CPA",
+    "subtitle": "OAuth Pool Console"
   },
   "login": {
     "subtitle": "Please enter connection information to access the management interface",

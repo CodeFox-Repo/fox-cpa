@@ -1,19 +1,24 @@
-# CLI Proxy API Management Center
+# Fox CPA
 
-A single-file Web UI (React + TypeScript) for operating and troubleshooting the **CLI Proxy API** via its **Management API** (config, credentials, and logs).
+A deliberately small, single-file Web UI (React + TypeScript) for the **CLI Proxy API** Management API. It is tailored for local OAuth account pools: only **Auth Files** and **Quota Management** are exposed.
 
 [中文文档](README_CN.md)
 
-**Main Project**: https://github.com/router-for-me/CLIProxyAPI  
+**Upstream CLI Proxy API**: https://github.com/router-for-me/CLIProxyAPI
 **Example URL**: https://remote.router-for.me/  
 **Minimum Required Version**: ≥ 7.1.0 (recommended latest)
 
 Since version 6.0.19, the Web UI ships with the main program; access it via `/management.html` on the API port once the service is running.
 
-## What this is (and isn’t)
+## Scope
 
-- This repository is the Web UI only. It talks to the CLI Proxy API **Management API** (`/v0/management`) to read/update config, upload credentials, and view logs.
+- This repository is the Web UI only. It talks to the CLI Proxy API **Management API** (`/v0/management`).
+- The main navigation and client routes are intentionally limited to **Auth Files** and **Quota Management**. All other panel routes redirect to Auth Files.
 - It is **not** a proxy and does not forward traffic.
+
+## Original project
+
+Fox CPA is a focused fork of [Cli-Proxy-API-Management-Center](https://github.com/router-for-me/Cli-Proxy-API-Management-Center). The upstream project remains the source for the complete management UI.
 
 ## Quick start
 
@@ -71,18 +76,10 @@ This is different from the proxy `api-keys` you manage inside the UI (those are 
 If you connect from a non-localhost browser, the server must allow remote management (e.g. `allow-remote-management: true`).  
 Check the CLI Proxy API server documentation/config comments for the full authentication rules, server-side limits, and edge cases.
 
-## What you can manage (mapped to the UI pages)
+## Included pages
 
-- **Dashboard**: connection status, server version/build date, quick counts, model availability snapshot.
-- **Config Panel**: visual editor for common `config.yaml` fields, basic settings, proxy `api-keys`, and source editing with YAML highlighting/search plus a save diff preview.
-- **AI Providers**:
-  - Gemini/Codex/Claude/Vertex key entries (base URL, headers, proxy, model aliases, excluded models, prefix).
-  - OpenAI-compatible providers (multiple API keys, custom headers, model alias import via `/v1/models`, optional browser-side "chat/completions" test).
-- **Auth Files**: upload/download/delete JSON credentials, filter/search/pagination, runtime-only indicators, view supported models per credential (when the server supports it), manage OAuth excluded models (supports `*` wildcards), configure OAuth model alias mappings.
-- **OAuth**: start OAuth/device flows for Codex, Anthropic/Claude, Antigravity, Kimi, and xAI/Grok; poll status; submit callback URLs or xAI/Grok displayed codes; import Vertex JSON credentials and iFlow cookies.
-- **Quota Management**: manage quota limits and usage for Claude, Antigravity, Codex, Kimi, xAI/Grok, and other providers.
-- **Logs**: tail logs with incremental polling, auto-refresh, search, hide management traffic, clear logs; download request error log files.
-- **System**: quick links, update check, request logging toggle, local login data cleanup, and fetch `/v1/models` (grouped view). Requires at least one proxy API key to query models.
+- **Auth Files**: inspect, upload, download, or delete OAuth credential files, plus per-account OAuth exclusions and model aliases.
+- **Quota Management**: inspect the provider quota limits and usage that CPA reports.
 
 ## Tech Stack
 
@@ -116,8 +113,7 @@ The UI language is automatically detected from browser settings and can be manua
 ## Build & release notes
 
 - Vite produces a **single HTML** output (`dist/index.html`) with all assets inlined (via `vite-plugin-singlefile`).
-- Tagging `vX.Y.Z` triggers `.github/workflows/release.yml` to publish `dist/management.html`.
-- The UI version shown on the System page is injected at build time (env `VERSION`, git tag, or `package.json` fallback).
+- To replace the local CPA panel, copy the built file to CPA's `static/management.html` and set `remote-management.disable-auto-update-panel: true` in CPA's config.
 
 ## Security notes
 
