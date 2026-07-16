@@ -64,13 +64,13 @@ export function QuotaPage() {
         disabled={disableControls}
       />
       <QuotaSection
-        config={ANTIGRAVITY_CONFIG}
+        config={CODEX_CONFIG}
         files={files}
         loading={loading}
         disabled={disableControls}
       />
       <QuotaSection
-        config={CODEX_CONFIG}
+        config={ANTIGRAVITY_CONFIG}
         files={files}
         loading={loading}
         disabled={disableControls}
