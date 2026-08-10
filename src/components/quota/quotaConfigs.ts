@@ -1050,6 +1050,12 @@ const renderCodexItems = (
   return h(Fragment, null, ...nodes);
 };
 
+// `limits` kinds that duplicate a top-level usage window (by window id above)
+const CLAUDE_LIMIT_KIND_TO_WINDOW_ID: Record<string, string> = {
+  session: 'five-hour',
+  weekly_all: 'seven-day',
+};
+
 const buildClaudeQuotaWindows = (
   payload: ClaudeUsagePayload,
   t: TFunction
@@ -1068,6 +1074,31 @@ const buildClaudeQuotaWindows = (
       labelKey,
       usedPercent,
       resetLabel,
+    });
+  }
+
+  // Scoped windows (e.g. weekly per-model limits) only exist in the `limits`
+  // array. Kinds mapped below duplicate a top-level window already rendered
+  // above; everything else renders generically — unknown future kinds fall
+  // back to `claude_quota.limit_<kind>` with the raw kind/scope as default,
+  // so new models or windows need no code change.
+  const renderedWindowIds = new Set(windows.map((w) => w.id));
+  for (const [index, limit] of (payload.limits ?? []).entries()) {
+    if (!limit || typeof limit !== 'object') continue;
+    const usedPercent = normalizeNumberValue(limit.percent);
+    if (usedPercent === null) continue;
+    const kind = typeof limit.kind === 'string' && limit.kind ? limit.kind : 'unknown';
+    const duplicateOfId = CLAUDE_LIMIT_KIND_TO_WINDOW_ID[kind];
+    if (duplicateOfId && renderedWindowIds.has(duplicateOfId)) continue;
+    const scopeName = limit.scope?.model?.display_name ?? limit.scope?.surface ?? null;
+    const fallbackLabel = scopeName ? `${kind} · ${scopeName}` : kind;
+    windows.push({
+      id: `limit-${kind}-${index}`,
+      label: fallbackLabel,
+      labelKey: `claude_quota.limit_${kind}`,
+      labelParams: { scope: scopeName ?? '', defaultValue: fallbackLabel },
+      usedPercent,
+      resetLabel: limit.resets_at ? formatQuotaResetTime(limit.resets_at) : '',
     });
   }
 
@@ -1227,36 +1258,89 @@ const renderClaudeItems = (
     return h(Fragment, null, ...nodes);
   }
 
-  nodes.push(
-    ...windows.map((window) => {
-      const used = window.usedPercent;
-      const clampedUsed = used === null ? null : Math.max(0, Math.min(100, used));
-      const remaining = clampedUsed === null ? null : Math.max(0, Math.min(100, 100 - clampedUsed));
-      const percentLabel = remaining === null ? '--' : `${Math.round(remaining)}%`;
-      const windowLabel = window.labelKey ? t(window.labelKey) : window.label;
+  const remainingOf = (window: ClaudeQuotaWindow): number | null => {
+    const used = window.usedPercent;
+    const clampedUsed = used === null ? null : Math.max(0, Math.min(100, used));
+    return clampedUsed === null ? null : Math.max(0, Math.min(100, 100 - clampedUsed));
+  };
+  const labelOf = (window: ClaudeQuotaWindow): string =>
+    window.labelKey ? t(window.labelKey, window.labelParams) : window.label;
 
-      return h(
+  // The active session window (5-hour) is the number people check first —
+  // render it as a featured block; the weekly windows group below it.
+  const heroWindow =
+    windows.find((w) => w.id === 'five-hour' || w.id.startsWith('limit-session')) ?? null;
+  const restWindows = windows.filter((w) => w !== heroWindow);
+
+  if (heroWindow) {
+    const remaining = remainingOf(heroWindow);
+    const percentLabel = remaining === null ? '--' : `${Math.round(remaining)}%`;
+    nodes.push(
+      h(
         'div',
-        { key: window.id, className: styleMap.quotaRow },
+        { key: heroWindow.id, className: styleMap.quotaHero },
         h(
           'div',
-          { className: styleMap.quotaRowHeader },
-          h('span', { className: styleMap.quotaModel }, windowLabel),
-          h(
-            'div',
-            { className: styleMap.quotaMeta },
-            h('span', { className: styleMap.quotaPercent }, percentLabel),
-            h('span', { className: styleMap.quotaReset }, window.resetLabel)
-          )
+          { className: styleMap.quotaHeroHeader },
+          h('span', { className: styleMap.quotaHeroLabel }, labelOf(heroWindow)),
+          h('span', { className: styleMap.quotaHeroReset }, heroWindow.resetLabel)
+        ),
+        h(
+          'div',
+          { className: styleMap.quotaHeroValue },
+          h('span', { className: styleMap.quotaHeroPercent }, percentLabel),
+          h('span', { className: styleMap.quotaHeroCaption }, t('claude_quota.remaining'))
         ),
         h(QuotaProgressBar, {
           percent: remaining,
           highThreshold: QUOTA_PROGRESS_HIGH_THRESHOLD,
           mediumThreshold: QUOTA_PROGRESS_MEDIUM_THRESHOLD,
+          large: true,
         })
+      )
+    );
+  }
+
+  const restRows = restWindows.map((window) => {
+    const remaining = remainingOf(window);
+    const percentLabel = remaining === null ? '--' : `${Math.round(remaining)}%`;
+
+    return h(
+      'div',
+      { key: window.id, className: styleMap.quotaRow },
+      h(
+        'div',
+        { className: styleMap.quotaRowHeader },
+        h('span', { className: styleMap.quotaModel }, labelOf(window)),
+        h(
+          'div',
+          { className: styleMap.quotaMeta },
+          h('span', { className: styleMap.quotaPercent }, percentLabel),
+          h('span', { className: styleMap.quotaReset }, window.resetLabel)
+        )
+      ),
+      h(QuotaProgressBar, {
+        percent: remaining,
+        highThreshold: QUOTA_PROGRESS_HIGH_THRESHOLD,
+        mediumThreshold: QUOTA_PROGRESS_MEDIUM_THRESHOLD,
+      })
+    );
+  });
+
+  if (restRows.length > 0) {
+    if (heroWindow) {
+      nodes.push(
+        h(
+          'div',
+          { key: 'weekly-group', className: styleMap.quotaGroup },
+          h('span', { className: styleMap.quotaGroupTitle }, t('claude_quota.weekly_group')),
+          ...restRows
+        )
       );
-    })
-  );
+    } else {
+      nodes.push(...restRows);
+    }
+  }
 
   return h(Fragment, null, ...nodes);
 };

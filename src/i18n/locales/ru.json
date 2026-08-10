@@ -351,6 +351,9 @@
     "seven_day_opus": "7 дней Opus",
     "seven_day_sonnet": "7 дней Sonnet",
     "seven_day_cowork": "7 дней Cowork",
+    "limit_session": "Лимит на 5 часов",
+    "limit_weekly_all": "Лимит на 7 дней",
+    "limit_weekly_scoped": "7 дней · {{scope}}",
     "iguana_necktie": "Iguana Necktie",
     "extra_usage_label": "Дополнительное использование",
     "plan_label": "План",
@@ -360,7 +363,9 @@
     "plan_max": "Max",
     "plan_max5": "Max 5x",
     "plan_max20": "Max 20x",
-    "plan_team": "Team"
+    "plan_team": "Team",
+    "remaining": "осталось",
+    "weekly_group": "Недельные лимиты"
   },
   "codex_quota": {
     "title": "Квота Codex",

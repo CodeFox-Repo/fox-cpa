@@ -23,12 +23,14 @@ export interface QuotaProgressBarProps {
   percent: number | null;
   highThreshold: number;
   mediumThreshold: number;
+  large?: boolean;
 }
 
 export function QuotaProgressBar({
   percent,
   highThreshold,
   mediumThreshold,
+  large = false,
 }: QuotaProgressBarProps) {
   const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
   const normalized = percent === null ? null : clamp(percent, 0, 100);
@@ -43,7 +45,7 @@ export function QuotaProgressBar({
   const widthPercent = Math.round((normalized ?? 0) * 100) / 100;
 
   return (
-    <div className={styles.quotaBar}>
+    <div className={large ? `${styles.quotaBar} ${styles.quotaBarLg}` : styles.quotaBar}>
       <div
         className={`${styles.quotaBarFill} ${fillClass}`}
         style={{ width: `${widthPercent}%` }}

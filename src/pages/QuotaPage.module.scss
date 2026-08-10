@@ -252,6 +252,75 @@
   gap: $spacing-xs;
 }
 
+.quotaHero {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+.quotaHeroHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: $spacing-sm;
+  min-width: 0;
+}
+
+.quotaHeroLabel {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.quotaHeroReset {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+.quotaHeroValue {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.quotaHeroPercent {
+  font-family: $font-display;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.quotaHeroCaption {
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.quotaBarLg {
+  height: 12px;
+}
+
+.quotaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  padding-top: $spacing-sm;
+  border-top: 1px solid color-mix(in srgb, var(--border-color) 65%, transparent);
+}
+
+.quotaGroupTitle {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
 .antigravityQuotaGroup {
   display: flex;
   flex-direction: column;
