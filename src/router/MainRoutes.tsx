@@ -1,9 +1,11 @@
 import { Navigate, useRoutes, type Location } from 'react-router-dom';
-import { AuthFilesPage } from '@/pages/AuthFilesPage';
+import { AuthFilesPage } from '@/features/authFiles/AuthFilesPage';
 import { AuthFilesOAuthExcludedEditPage } from '@/pages/AuthFilesOAuthExcludedEditPage';
 import { AuthFilesOAuthModelAliasEditPage } from '@/pages/AuthFilesOAuthModelAliasEditPage';
-import { QuotaPage } from '@/pages/QuotaPage';
+import { QuotaPage } from '@/features/quota/QuotaPage';
 
+// fox-cpa: only Auth Files + Quota are exposed; every other upstream route
+// (dashboard, providers, plugins, config, logs, system) falls back to /auth-files.
 const createMainRoutes = () => [
   { path: '/', element: <Navigate to="/auth-files" replace /> },
   { path: '/auth-files', element: <AuthFilesPage /> },

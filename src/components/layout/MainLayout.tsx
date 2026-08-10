@@ -16,10 +16,7 @@ import { Button } from '@/components/ui/Button';
 import { PageTransition } from '@/components/common/PageTransition';
 import { MainRoutes } from '@/router/MainRoutes';
 import { authFilesApi } from '@/services/api';
-import {
-  IconSidebarAuthFiles,
-  IconSidebarQuota,
-} from '@/components/ui/icons';
+import { IconSidebarAuthFiles, IconSidebarQuota } from '@/components/ui/icons';
 import { FOX_CPA_LOGO } from '@/assets/foxCpaLogo';
 import {
   useAuthStore,
@@ -598,7 +595,7 @@ export function MainLayout() {
       </>
     ) : null;
 
-  const renderNavLink =(item: SidebarNavLinkItem, className = 'nav-item') => {
+  const renderNavLink = (item: SidebarNavLinkItem, className = 'nav-item') => {
     const itemLabel = item.label ?? (item.labelKey ? t(item.labelKey) : '');
     const itemMeta = item.meta ?? (item.metaKey ? t(item.metaKey) : '');
     const accessibleLabel = item.badgeLabel ? `${itemLabel}, ${item.badgeLabel}` : itemLabel;

@@ -45,9 +45,21 @@ $z-notification: 3000;
 
 // 字体
 $font-family:
-  'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-  'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  'Instrument Sans',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  'Roboto',
+  'Oxygen',
+  'Ubuntu',
+  'Cantarell',
+  'Fira Sans',
+  'Droid Sans',
+  'Helvetica Neue',
+  sans-serif;
 
 $font-display: 'Fraunces', 'Songti SC', 'Noto Serif SC', Georgia, serif;
 
-$font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+$font-mono:
+  'IBM Plex Mono', ui-monospace, 'SF Mono', 'Cascadia Mono', 'JetBrains Mono', 'Fira Code', Menlo,
+  Consolas, 'Liberation Mono', monospace;
