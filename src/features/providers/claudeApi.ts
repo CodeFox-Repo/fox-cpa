@@ -12,7 +12,9 @@ const normalizeBaseUrl = (value: string | undefined | null): string =>
     .toLowerCase()
     .replace(/\/+$/, '');
 
-export const isClaudeApiProvider = (config: ProviderKeyConfig | undefined | null): boolean => {
+export const isClaudeApiProvider = (
+  config: ProviderKeyConfig | undefined | null
+): boolean => {
   if (!config) return false;
   const baseUrl = normalizeBaseUrl(config.baseUrl);
   return [CLAUDE_API_BASE_URL, CLAUDE_API_LEGACY_BASE_URL].some(

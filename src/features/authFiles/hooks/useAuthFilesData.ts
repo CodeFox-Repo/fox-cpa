@@ -147,31 +147,28 @@ export function useAuthFilesData(options?: UseAuthFilesDataOptions): UseAuthFile
     setSelectedFiles(new Set());
   }, []);
 
-  const applyDeletedFiles = useCallback(
-    (names: string[]) => {
-      const deletedNames = Array.from(new Set(names.map((name) => name.trim()).filter(Boolean)));
-      if (deletedNames.length === 0) return;
+  const applyDeletedFiles = useCallback((names: string[]) => {
+    const deletedNames = Array.from(new Set(names.map((name) => name.trim()).filter(Boolean)));
+    if (deletedNames.length === 0) return;
 
-      invalidateInFlightLoads();
-      onFilesMutatedRef.current?.(deletedNames);
-      const deletedSet = new Set(deletedNames);
-      setFiles((prev) => prev.filter((file) => !deletedSet.has(file.name)));
-      setSelectedFiles((prev) => {
-        if (prev.size === 0) return prev;
-        let changed = false;
-        const next = new Set<string>();
-        prev.forEach((name) => {
-          if (deletedSet.has(name)) {
-            changed = true;
-          } else {
-            next.add(name);
-          }
-        });
-        return changed ? next : prev;
+    invalidateInFlightLoads();
+    onFilesMutatedRef.current?.(deletedNames);
+    const deletedSet = new Set(deletedNames);
+    setFiles((prev) => prev.filter((file) => !deletedSet.has(file.name)));
+    setSelectedFiles((prev) => {
+      if (prev.size === 0) return prev;
+      let changed = false;
+      const next = new Set<string>();
+      prev.forEach((name) => {
+        if (deletedSet.has(name)) {
+          changed = true;
+        } else {
+          next.add(name);
+        }
       });
-    },
-    [invalidateInFlightLoads]
-  );
+      return changed ? next : prev;
+    });
+  }, [invalidateInFlightLoads]);
 
   useEffect(() => {
     if (selectedFiles.size === 0) return;
@@ -471,15 +468,7 @@ export function useAuthFilesData(options?: UseAuthFilesDataOptions): UseAuthFile
         },
       });
     },
-    [
-      applyDeletedFiles,
-      deselectAll,
-      files,
-      invalidateInFlightLoads,
-      showConfirmation,
-      showNotification,
-      t,
-    ]
+    [applyDeletedFiles, deselectAll, files, invalidateInFlightLoads, showConfirmation, showNotification, t]
   );
 
   const handleDownload = useCallback(

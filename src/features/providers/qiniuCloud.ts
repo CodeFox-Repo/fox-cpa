@@ -116,7 +116,9 @@ export const isQiniuCloudCodexProvider = (
   return matchesQiniuCloudOpenAIBaseUrl(config.baseUrl);
 };
 
-export const isQiniuCloudGeminiProvider = (config: GeminiKeyConfig | undefined | null): boolean => {
+export const isQiniuCloudGeminiProvider = (
+  config: GeminiKeyConfig | undefined | null
+): boolean => {
   if (!config) return false;
   return matchesQiniuCloudGeminiBaseUrl(config.baseUrl);
 };

@@ -20,7 +20,11 @@ import { useHeaderRefresh } from '@/hooks/useHeaderRefresh';
 import { pluginsApi } from '@/services/api';
 import { useAuthStore, useConfigStore, useNotificationStore } from '@/stores';
 import { getErrorMessage, isRecord } from '@/utils/helpers';
-import type { PluginConfigField, PluginListEntry, PluginListResponse } from '@/types';
+import type {
+  PluginConfigField,
+  PluginListEntry,
+  PluginListResponse,
+} from '@/types';
 import {
   buildPluginConfigDraft,
   buildPluginConfigPatch,
