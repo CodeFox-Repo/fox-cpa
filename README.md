@@ -6,7 +6,7 @@ A deliberately small, single-file Web UI (React + TypeScript) for the **CLI Prox
 
 **Upstream CLI Proxy API**: https://github.com/router-for-me/CLIProxyAPI
 **Example URL**: https://remote.router-for.me/  
-**Minimum Required Version**: ≥ 7.1.0 (recommended latest)
+**Minimum Required Version**: ≥ 7.2.147 (recommended latest)
 
 Since version 6.0.19, the Web UI ships with the main program; access it via `/management.html` on the API port once the service is running.
 
